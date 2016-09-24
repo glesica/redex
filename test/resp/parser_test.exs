@@ -36,7 +36,7 @@ defmodule Redex.RESP.ParserTest do
     assert parse(":-100\r\n") == {:int, -100}
   end
 
-  test "should parse zero integers" do
+  test "should parse the zero integer" do
     assert parse(":0\r\n") == {:int, 0}
   end
 
