@@ -74,6 +74,12 @@ defmodule Redex.RESP.ParserTest do
       {:array, [{:bstr, "foo"}, {:bstr, "bar"}]}
   end
 
+  test "should parse an array of arrays" do
+    assert parse("*2\r\n*2\r\n:1\r\n:2\r\n*2\r\n+foo\r\n-bar\r\n") ==
+      {:array, [{:array, [{:int, 1}, {:int, 2}]},
+        {:array, [{:str, "foo"}, {:err, "bar"}]}]}
+  end
+
   test "should return :error on array length mismatch" do
     assert parse("*2\r\n+OK\r\n") == :error
   end
