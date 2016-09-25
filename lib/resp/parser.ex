@@ -110,6 +110,8 @@ defmodule Redex.RESP.Parser do
   # Array
   defp parse_term(<< "*", new_data::binary >>) do
     case consume_int(new_data) do
+      {-1, ""} ->
+        {{:array, :null}, ""}
       {array_len, new_data} when is_integer(array_len) ->
         parse_array(new_data, array_len, [])
       {:error, {:eof, _}, _} ->
@@ -118,6 +120,7 @@ defmodule Redex.RESP.Parser do
         :error
     end
   end
+
   defp parse_term(_), do: :error
 
   defp parse_array(data, 0, array_els), do: {{:array, array_els}, data}

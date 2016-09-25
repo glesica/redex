@@ -48,6 +48,10 @@ defmodule Redex.RESP.ComposerTest do
     assert compose({:array, []}) == "*0\r\n"
   end
 
+  test "should compose a null array" do
+    assert compose({:array, :null}) == "*-1\r\n"
+  end
+
   test "should compose an array with homogeneous simple types" do
     assert compose({:array, [{:int, 1}, {:int, 2}]}) == "*2\r\n:1\r\n:2\r\n"
   end

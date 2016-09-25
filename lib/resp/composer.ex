@@ -4,6 +4,7 @@ defmodule Redex.RESP.Composer do
   def compose({:int, int}), do: ":#{int}\r\n"
   def compose({:bstr, :null}), do: "$-1\r\n"
   def compose({:bstr, bstr}), do: "$#{String.length(bstr)}\r\n#{bstr}\r\n"
+  def compose({:array, :null}), do: "*-1\r\n"
   def compose({:array, array}) do
     array_len = length(array)
     terms_str = Enum.reduce(array, "", fn t, str -> str <> compose(t) end)

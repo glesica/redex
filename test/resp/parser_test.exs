@@ -61,6 +61,10 @@ defmodule Redex.RESP.ParserTest do
     assert parse("*0\r\n") == {:array, []}
   end
 
+  test "should parse a null array" do
+    assert parse("*-1\r\n") == {:array, :null}
+  end
+
   test "should parse an array with homogeneous simple types" do
     assert parse("*2\r\n:1\r\n:2\r\n") == {:array, [{:int, 1}, {:int, 2}]}
   end
