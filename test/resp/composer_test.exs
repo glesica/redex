@@ -66,9 +66,30 @@ defmodule Redex.RESP.ComposerTest do
   end
 
   test "should compose an array of arrays" do
-      assert compose({:array, [{:array, [{:int, 1}, {:int, 2}]},
-        {:array, [{:str, "foo"}, {:err, "bar"}]}]}) ==
-          "*2\r\n*2\r\n:1\r\n:2\r\n*2\r\n+foo\r\n-bar\r\n"
+    assert compose({:array, [{:array, [{:int, 1}, {:int, 2}]},
+      {:array, [{:str, "foo"}, {:err, "bar"}]}]}) ==
+        "*2\r\n*2\r\n:1\r\n:2\r\n*2\r\n+foo\r\n-bar\r\n"
+  end
+
+  test "should compose a simple string command" do
+    assert command("get mykey") == compose({:array, [{:bstr, "get"}, {:bstr, "mykey"}]})
+  end
+
+  test "should compose a simple list command" do
+    assert command(["get", "mykey"]) == compose({:array, [{:bstr, "get"}, {:bstr, "mykey"}]})
+  end
+
+  test "should compose a string command that contains an integer" do
+    assert command("set mykey 1") ==
+      compose({:array, [{:bstr, "set"}, {:bstr, "mykey"}, {:int, 1}]})
+  end
+
+  test "should compose a list command that contains an integer" do
+    assert command(["set", "mykey", 1]) ==
+      compose({:array, [{:bstr, "set"}, {:bstr, "mykey"}, {:int, 1}]})
+  end
+
+  test "should compose a string command that contains a quoted string" do
   end
 end
 

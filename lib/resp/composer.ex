@@ -10,4 +10,18 @@ defmodule Redex.RESP.Composer do
     terms_str = Enum.reduce(array, "", fn t, str -> str <> compose(t) end)
     "*#{array_len}\r\n#{terms_str}"
   end
+
+  # TODO: This is extremely naive, improve it.
+  def command(cmd) when is_binary(cmd) do
+    cmd
+      |> String.split(" ")
+      |> Enum.map(&cmd_compose/1)
+      |> Enum.reduce({:array, []}, fn b, {:array, l} -> {:array, l ++ [b]} end)
+      |> compose
+  end
+  def command(cmd) when is_list(cmd), do: cmd |> cmd_compose |> compose
+
+  defp cmd_compose(data) when is_binary(data), do: {:bstr, data}
+  defp cmd_compose(data) when is_integer(data), do: {:int, data}
+  defp cmd_compose(data) when is_list(data), do: {:array, data |> Enum.map(&cmd_compose/1)}
 end
