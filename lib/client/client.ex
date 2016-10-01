@@ -1,3 +1,6 @@
+import Redex.Client.Parser
+import Redex.RESP.Composer
+
 defmodule Redex.Client do
   use GenServer
 
@@ -18,7 +21,7 @@ defmodule Redex.Client do
   end
 
   def handle_call({:command, cmd}, from, %{socket: socket} = state) do
-    :ok = :gen_tcp.send(socket, Redex.RESP.Composer.command(cmd))
+    :ok = :gen_tcp.send(socket, parse_cmd(cmd) |> compose)
 
     {:ok, msg} = :gen_tcp.recv(socket, 0)
     {:reply, Redex.RESP.Parser.parse(msg), state}
