@@ -6,7 +6,7 @@ defmodule Redex.Command.ParserTest do
 
   test "should parse a command with an integer" do
     assert parse("set count 1") ==
-      {:array, [{:bstr, "set"}, {:bstr, "count"}, {:int, 1}]}
+      {:array, [{:bstr, "set"}, {:bstr, "count"}, {:bstr, "1"}]}
   end
 
   test "should parse a command with a double quoted string" do

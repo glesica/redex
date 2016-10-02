@@ -18,14 +18,8 @@ defmodule Redex.Command.Parser do
         {part, newcmd} = consume_str(tail, "", "'")
         parse(newcmd, parts ++ [part])
       _ ->
-        cond do
-          String.match?(char, ~r"\d") ->
-            {part, newcmd} = consume_int(cmd, "")
-            parse(newcmd, parts ++ [part])
-          true ->
-            {part, newcmd} = consume_part(cmd, "")
-            parse(newcmd, parts ++ [part])
-        end
+        {part, newcmd} = consume_part(cmd, "")
+        parse(newcmd, parts ++ [part])
     end
   end
 
