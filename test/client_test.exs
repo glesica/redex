@@ -9,6 +9,7 @@ defmodule Redex.ClientTest do
     [pid: pid]
   end
 
+  @tag :skip
   test "should set and get a simple key", context do
     assert command(context[:pid], "set testkey0 testvalue0") ==
       {:str, "OK"}
@@ -18,6 +19,7 @@ defmodule Redex.ClientTest do
       {:int, 1}
   end
 
+  @tag :skip
   test "should set and get a key with an integral value", context do
     assert command(context[:pid], "set testkey0 10") ==
       {:str, "OK"}
