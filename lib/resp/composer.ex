@@ -11,3 +11,4 @@ defmodule Redex.RESP.Composer do
     "*#{array_len}\r\n#{terms_str}"
   end
 end
+

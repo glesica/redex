@@ -1,4 +1,4 @@
-import Redex.Client.Parser
+import Redex.Command.Parser
 import Redex.RESP.Composer
 
 defmodule Redex.Client do
@@ -12,7 +12,7 @@ defmodule Redex.Client do
 
   def init(state) do
     opts = [:binary, active: false]
-    {:ok, socket} = :gen_tcp.connect('localhost', 6379, opts)
+    {:ok, socket} = :gen_tcp.connect('localhost', 9876, opts)
     {:ok, %{state | socket: socket}}
   end
 
@@ -20,10 +20,10 @@ defmodule Redex.Client do
     GenServer.call(pid, {:command, cmd})
   end
 
-  def handle_call({:command, cmd}, from, %{socket: socket} = state) do
-    :ok = :gen_tcp.send(socket, parse_cmd(cmd) |> compose)
-
+  def handle_call({:command, cmd}, _, %{socket: socket} = state) do
+    :ok = :gen_tcp.send(socket, cmd |> parse |> compose)
     {:ok, msg} = :gen_tcp.recv(socket, 0)
     {:reply, Redex.RESP.Parser.parse(msg), state}
   end
 end
+
