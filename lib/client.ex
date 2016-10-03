@@ -6,6 +6,10 @@ defmodule Redex.Client do
 
   @initial_state %{socket: nil}
 
+  def execute(pid, cmd) do
+    GenServer.call(pid, {:cmd, cmd})
+  end
+
   def start_link do
     GenServer.start_link(__MODULE__, @initial_state)
   end
@@ -16,11 +20,7 @@ defmodule Redex.Client do
     {:ok, %{state | socket: socket}}
   end
 
-  def command(pid, cmd) do
-    GenServer.call(pid, {:command, cmd})
-  end
-
-  def handle_call({:command, cmd}, _, %{socket: socket} = state) do
+  def handle_call({:cmd, cmd}, _, %{socket: socket} = state) do
     :ok = :gen_tcp.send(socket, cmd |> parse |> compose)
     {:ok, msg} = :gen_tcp.recv(socket, 0)
     {:reply, Redex.RESP.Parser.parse(msg), state}

@@ -11,23 +11,23 @@ defmodule Redex.ClientTest do
 
   @tag :skip
   test "should set and get a simple key", context do
-    assert command(context[:pid], "set testkey0 testvalue0") ==
+    assert execute(context[:pid], "set testkey0 testvalue0") ==
       {:str, "OK"}
-    assert command(context[:pid], "get testkey0") ==
+    assert execute(context[:pid], "get testkey0") ==
       {:bstr, "testvalue0"}
-    assert command(context[:pid], "del testkey0") ==
+    assert execute(context[:pid], "del testkey0") ==
       {:int, 1}
   end
 
   @tag :skip
   test "should set and get a key with an integral value", context do
-    assert command(context[:pid], "set testkey0 10") ==
+    assert execute(context[:pid], "set testkey0 10") ==
       {:str, "OK"}
-    assert command(context[:pid], "get testkey0") ==
+    assert execute(context[:pid], "get testkey0") ==
       {:bstr, "10"}
-    assert command(context[:pid], "incr testkey0") ==
+    assert execute(context[:pid], "incr testkey0") ==
       {:int, 11}
-    assert command(context[:pid], "del testkey0") ==
+    assert execute(context[:pid], "del testkey0") ==
       {:int, 1}
   end
 end

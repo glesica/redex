@@ -16,7 +16,7 @@ defmodule Redex.Client.Main do
       "quit\n" ->
         quit()
       _ ->
-        {_, resp} = Redex.Client.command(pid, cmd |> String.trim)
+        {_, resp} = Redex.Client.execute(pid, cmd |> String.trim)
         IO.puts(resp)
         prompt(pid)
     end
